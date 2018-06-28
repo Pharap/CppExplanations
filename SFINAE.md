@@ -5,7 +5,7 @@
 What does this mean?  
 
 The loosest possible definition of SFINAE is 'template type hacks'.  
-In general people understand that it's some kind of advanced C++ wizardry practised only by the cult of Hermaeus Mora.  
+In general people understand that it's some kind of advanced C++ wizardry practised only by voodoo priests, Nth level arcane warlocks of the dark-realm and the daedra-worshipping cult of Hermaeus Mora.  
 Even a lot of the people who do use it don't quite understand what it means.  
 
 But it's actually not that difficult if you've got a bit of basic template knowledge.  
