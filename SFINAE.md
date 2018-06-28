@@ -2,25 +2,25 @@
 
 ## Substitution Failure Is Not An Error
 
-What does this mean?
+What does this mean?  
 
-The loosest possible definition of SFINAE is 'template type hacks'.
-In general people understand that it's some kind of advanced C++ wizardry practised only by priests of Hermaeus Mora.
-Even a lot of the people who do use it don't quite understand what it means.
+The loosest possible definition of SFINAE is 'template type hacks'.  
+In general people understand that it's some kind of advanced C++ wizardry practised only by priests of Hermaeus Mora.  
+Even a lot of the people who do use it don't quite understand what it means.  
 
-But it's actually not that difficult if you've got a bit of basic template knowledge.
+But it's actually not that difficult if you've got a bit of basic template knowledge.  
 
 ## Definition by words
 
-A substitution failure is when the compiler is unable to instantiate a template because the resulting instantiation would be invalid.
-The SFINAE rule states that if a substitution failure occurs when performing overload resolution for a function, the compiler should not signal an error.
-Instead the compiler should discard the instantiated function and remove it from the list of potential overloads.
+A substitution failure is when the compiler is unable to instantiate a template because the resulting instantiation would be invalid.  
+The SFINAE rule states that if a substitution failure occurs when performing overload resolution for a function, the compiler should not signal an error.  
+Instead the compiler should discard the instantiated function and remove it from the list of potential overloads.  
 
 ## Definition by example
 
-This is quite a long example, but bear with me.
+This is quite a long example, but bear with me.  
 
-Consider the following function, `negate`:
+Consider the following function, `negate`:  
 ```cpp
 template < typename T >
 typename T::result_type negate(const T & value)
@@ -29,9 +29,9 @@ typename T::result_type negate(const T & value)
 }
 ```
 
-It expects the type `T` to have a member type alias `result_type` and an implementation of `operator -` (that accepts a value or reference to T as a parameter and is either a member function or a free function).
+It expects the type `T` to have a member type alias `result_type` and an implementation of `operator -` (that accepts a value or reference to T as a parameter and is either a member function or a free function).  
 
-Such a class might look like this:
+Such a class might look like this:  
 ```cpp
 class Vector
 {
@@ -52,7 +52,7 @@ public:
 };
 ```
 
-`negate` can happily be used on this class because it meets the requirements of `T`:
+`negate` can happily be used on this class because it meets the requirements of `T`:  
 ```cpp
 Vector vector = Vector(1, 1);
 auto result = negate(vector); // Equivalent to Vector result = -vector;
@@ -64,8 +64,8 @@ int integer = 1;
 auto result = negate(integer);
 ```
 
-This fails. If you're a wizard you'll have realised why.
-Essentially the compiler attempts to create this:
+This fails. If you're a wizard you'll have realised why.  
+Essentially the compiler attempts to create this:  
 ```cpp
 typename int::result_type negate(const int & value)
 {
@@ -73,8 +73,8 @@ typename int::result_type negate(const int & value)
 }
 ```
 
-This code fails because there's no such thing as `int::result_type`.
-So let's go on to create another function that can handle `int`.
+This code fails because there's no such thing as `int::result_type`.  
+So let's go on to create another function that can handle `int`.  
 ```cpp
 int negate(int value)
 {
@@ -82,13 +82,13 @@ int negate(int value)
 }
 ```
 
-Now obviously, the code works:
+Now obviously, the code works:  
 ```cpp
 int integer = 1;
 auto result = negate(integer);
 ```
 
-Now what if I told you that you had just witnessed SFINAE in action?
+Now what if I told you that you had just witnessed SFINAE in action?  
 
 Here's the whole code:
 
@@ -111,23 +111,23 @@ void function(void)
 }
 ```
 
-Stop and think about that for a moment.
-What happened to the compiler-instantiated function that doesn't work?
+Stop and think about that for a moment.  
+What happened to the compiler-instantiated function that doesn't work?  
 
 It's easy to dismiss this as just "the compiler decided that this was a better match",
-but the compiler still hat to attempt to instantiate the other function to determine that.
-That means that the function didn't complain about the failure to compile the other function.
+but the compiler still hat to attempt to instantiate the other function to determine that.  
+That means that the function didn't complain about the failure to compile the other function.  
 
-The fact it didn't complain - that is SFINAE.
+The fact it didn't complain - that is SFINAE.  
 
-The compiler attempted to instantiate the templated `negate` function.
-The instantiation failed, but the compiler still found a suitable match so it decided not to complain - **that is the SFINAE rule**.
-Specifically, the compiler failed to substitute `int` for the type variable `T` - **that is the 'substitute failure' part**.
-Following that the compiler didn't raise an error because it found something better - **that is the 'not an error' part**.
+The compiler attempted to instantiate the templated `negate` function.  
+The instantiation failed, but the compiler still found a suitable match so it decided not to complain - **that is the SFINAE rule**.  
+Specifically, the compiler failed to substitute `int` for the type variable `T` - **that is the 'substitute failure' part**.  
+Following that the compiler didn't raise an error because it found something better - **that is the 'not an error' part**.  
 
-## When does SFINAE occur?
+## When does SFINAE occur?  
 
-The cases where type substitution may occur in a template function include:
+The cases where type substitution may occur in a template function include:  
 
 * The return type
 * The types of any function parameters
@@ -137,7 +137,7 @@ The cases where type substitution may occur in a template function include:
 * All expressions used in determining the function type
 * All expressions used in the template parameter declaration
 
-## Which errors are substitution errors?
+## Which errors are substitution errors?  
 
 * Attempting to create
 	* an array of `void`
