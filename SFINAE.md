@@ -123,7 +123,7 @@ The fact it didn't complain - that is SFINAE.
 
 The compiler attempted to instantiate the templated `negate` function.  
 The instantiation failed, but the compiler still found a suitable match so it decided not to complain - **that is the SFINAE rule**.  
-Specifically, the compiler failed to substitute `int` for the type variable `T` - **that is the 'substitute failure' part**.  
+Specifically, the compiler failed to substitute `int` for the type variable `T` - **that is the 'substitution failure' part**.  
 Following that the compiler didn't raise an error because it found something better - **that is the 'not an error' part**.  
 
 ## When does SFINAE occur?  
