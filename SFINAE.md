@@ -46,7 +46,7 @@ public:
 public:
 	Vector(int x, int y) : x(x), y(y) {}
 	
-	Vector operator-(void) const
+	Vector operator-() const
 	{
 		return Vector(-this->x, -this->y);
 	}
@@ -105,7 +105,7 @@ int negate(int value)
 	return -value;
 }
 
-void function(void)
+void function()
 {
 	int integer = 1;
 	auto result = negate(integer);
